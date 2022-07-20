@@ -6,6 +6,6 @@ defmodule HelloWeb.LayoutView do
   @compile {:no_warn_undefined, {Routes, :live_dashboard_path, 2}}
 
   def title() do
-    "Awesome New Title!"
+    "Ecommerce App!"
   end
 end
