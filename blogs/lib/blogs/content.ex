@@ -21,6 +21,22 @@ defmodule Blogs.Content do
     Repo.all(Post)
   end
 
+  def list_posts_logged_in(user_id) do
+    query =
+      from(p in Post, where: p.user_id == ^user_id)
+
+    Repo.all(query)
+  end
+
+
+  def inc_page_views(%Post{} = post) do
+    {1, [%Post{views: views}]} =
+      from(p in Post, where: p.id == ^post.id, select: [:views])
+      |> Repo.update_all(inc: [views: 1])
+
+    put_in(post.views, views)
+  end
+
   @doc """
   Gets a single post.
 
@@ -49,8 +65,8 @@ defmodule Blogs.Content do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_post(attrs \\ %{}) do
-    %Post{}
+  def create_post(post, attrs \\ %{}) do
+    post
     |> Post.changeset(attrs)
     |> Repo.insert()
   end

@@ -9,13 +9,21 @@ defmodule BlogsWeb.PostController do
     render(conn, "index.html", posts: posts)
   end
 
+  def logged_in_index(conn,  _params) do
+    id = conn.assigns.current_user.id
+    posts = Content.list_posts_logged_in(id)
+    render(conn, "index_logged_in.html", posts: posts)
+  end
+
   def new(conn, _params) do
     changeset = Content.change_post(%Post{})
     render(conn, "new.html", changeset: changeset)
   end
 
   def create(conn, %{"post" => post_params}) do
-    case Content.create_post(post_params) do
+    current_user = conn.assigns.current_user
+    changeset = Ecto.build_assoc(current_user, :posts, post_params)
+    case Content.create_post(changeset,post_params) do
       {:ok, post} ->
         conn
         |> put_flash(:info, "Post created successfully.")
@@ -27,7 +35,7 @@ defmodule BlogsWeb.PostController do
   end
 
   def show(conn, %{"id" => id}) do
-    post = Content.get_post!(id)
+    post = Content.get_post!(id) |> Content.inc_page_views()
     render(conn, "show.html", post: post)
   end
 

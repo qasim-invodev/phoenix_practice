@@ -1,23 +1,22 @@
 <h1>Show Post</h1>
-
-<ul>
-
-  <li>
-    <strong>Title:</strong>
+<div>
+  <h2>
+    Title:
     <%= @post.title %>
-  </li>
+  </h2>
+    
+  <strong>Views:</strong><%= @post.views %><br>
+  <strong>Posted_by:</strong><%= @post.user_id %>
 
-  <li>
+  <p>
     <strong>Body:</strong>
     <%= @post.body %>
-  </li>
+  </p>
 
-  <li>
-    <strong>Views:</strong>
-    <%= @post.views %>
-  </li>
-
-</ul>
-
-<span><%= link "Edit", to: Routes.post_path(@conn, :edit, @post) %></span> |
-<span><%= link "Back", to: Routes.post_path(@conn, :index) %></span>
+</div>
+<%= if @conn.assigns.current_user.id == @post.user_id do %>
+  <span><%= link "Edit", to: Routes.post_path(@conn, :edit, @post) %></span> |
+  <span><%= link "Back", to: Routes.post_path(@conn, :index) %></span>
+<% else %>
+  <span><%= link "Back", to: Routes.post_path(@conn, :index) %></span>
+<% end %>

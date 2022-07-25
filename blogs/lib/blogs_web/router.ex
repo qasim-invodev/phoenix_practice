@@ -69,6 +69,7 @@ defmodule BlogsWeb.Router do
   scope "/", BlogsWeb do
     pipe_through [:browser, :require_authenticated_user]
 
+    get "/my_posts", PostController, :logged_in_index
     resources "/posts", PostController, except: [:index, :show]
     get "/users/settings", UserSettingsController, :edit
     put "/users/settings", UserSettingsController, :update

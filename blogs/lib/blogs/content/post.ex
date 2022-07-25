@@ -15,6 +15,6 @@ defmodule Blogs.Content.Post do
   def changeset(post, attrs) do
     post
     |> cast(attrs, [:user_id,:title, :body, :views])
-    |> validate_required([:user_id,:title, :body, :views])
+    |> validate_required([:user_id,:title, :body])
   end
 end
