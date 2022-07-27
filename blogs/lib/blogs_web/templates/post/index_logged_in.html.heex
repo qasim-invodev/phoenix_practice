@@ -22,7 +22,7 @@
       <td><%= post.title %></td>
       <td><%= post.body %></td>
       <td><%= post.views %></td>
-      <td><%= post.user_id %></td>
+      <td><%= post.user.email %></td>
 
       <td>
         <span><%= link "Show", to: Routes.post_path(@conn, :show, post) %></span>

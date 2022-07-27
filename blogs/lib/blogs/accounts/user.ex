@@ -9,6 +9,8 @@ defmodule Blogs.Accounts.User do
     field :confirmed_at, :naive_datetime
 
     has_many :posts, Blogs.Content.Post
+    has_many :comments, Blogs.Content.Comment
+
     timestamps()
   end
 

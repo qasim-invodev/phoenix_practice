@@ -71,6 +71,13 @@ defmodule BlogsWeb.Router do
 
     get "/my_posts", PostController, :logged_in_index
     resources "/posts", PostController, except: [:index, :show]
+
+    # post "/posts/create_comment", PostController, :create_comment
+    # delete "/posts/delete_comment", PostController, :delete_comment
+    # put "/posts/update_comment", PostController, :update_comment
+    resources "/posts", PostController, except: [:index, :show] do
+      resources "/comments", CommentController, only: [:create, :update, :delete]
+    end
     get "/users/settings", UserSettingsController, :edit
     put "/users/settings", UserSettingsController, :update
     get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email

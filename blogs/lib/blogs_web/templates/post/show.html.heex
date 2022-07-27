@@ -6,10 +6,10 @@
   </h2>
     
   <strong>Views:</strong><%= @post.views %><br>
-  <strong>Posted_by:</strong><%= @post.user_id %>
+  <strong>Posted_by:</strong><%= @post.user.email %>
 
   <p>
-    <strong>Body:</strong>
+    <strong>Post:</strong>
     <%= @post.body %>
   </p>
 
@@ -19,4 +19,51 @@
   <span><%= link "Back", to: Routes.post_path(@conn, :index) %></span>
 <% else %>
   <span><%= link "Back", to: Routes.post_path(@conn, :index) %></span>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Author</th>
+      <th>Comment</th>
+      <th>Update</th>
+      <th>Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+      <%= for comment <- @post.comments do %>
+        <%= if @conn.assigns.current_user.id == comment.user.id do %>
+          <tr>
+            <td><%= comment.user.email %></td>
+            <td><%= comment.body %></td>
+            <td><%= link "Edit", to: Routes.post_comment_path(@conn, :update, comment.post_id, comment.id) %></td>
+            <td><%= link "Delete",
+                method: :delete,
+                to: Routes.post_comment_path(@conn, :delete, @post, comment),
+                data: [confirm: "Are you sure you want to delete this comment?"]
+          %></td>
+          </tr>
+        <% else %>
+          <tr>
+            <td><%= comment.user.email %></td>
+            <td><%= comment.body %></td>
+            <td>N/A</td>
+            <td>N/A</td>
+          </tr>
+        <% end %>
+      <% end %>
+  </tbody>
+</table>
+
+<%= if @conn.assigns.current_user do %>
+  <%= form_for @comment_changeset, Routes.post_comment_path(@conn, :create_comment, @post), fn form -> %>
+
+    <%= label form, :new_comment %>
+    <%= textarea form, :body %>
+    <%= error_tag form, :body %>
+
+    <div>
+      <%= submit "Save Comment"%>
+    </div>
+  <% end %>
 <% end %>
