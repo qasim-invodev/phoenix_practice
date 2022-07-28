@@ -76,7 +76,7 @@ defmodule BlogsWeb.Router do
     # delete "/posts/delete_comment", PostController, :delete_comment
     # put "/posts/update_comment", PostController, :update_comment
     resources "/posts", PostController, except: [:index, :show] do
-      resources "/comments", CommentController, only: [:create, :update, :delete]
+      resources "/comments", CommentController, only: [:create, :update, :delete, :edit]
     end
     get "/users/settings", UserSettingsController, :edit
     put "/users/settings", UserSettingsController, :update

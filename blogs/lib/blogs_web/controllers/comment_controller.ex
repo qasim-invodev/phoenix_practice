@@ -36,5 +36,26 @@ defmodule BlogsWeb.CommentController do
     |> redirect(to: Routes.post_path(conn, :show, post_id))
   end
 
+  def update(conn, %{"id" => id, "post_id" => post_id, "comment" => comment_params}) do
+    comment = Content.get_comment!(id)
+
+    case Content.update_comment(comment, comment_params) do
+      {:ok, _} ->
+        conn
+        |> put_flash(:info, "Comment updated successfully.")
+        |> redirect(to: Routes.post_path(conn, :show, post_id))
+      {:error, _} ->
+        conn
+        |> put_flash(:info, "Failed to update comment!")
+        |> redirect(to: Routes.post_path(conn, :show, post_id))
+    end
+  end
+
+  def edit(conn, %{"id" => id, "post_id" => post_id}) do
+    comment = Content.get_comment!(id)
+    post = Content.get_post!(post_id)
+    comment_changeset = Content.change_comment(comment)
+    render(conn, "edit_comment.html", post: post, comment: comment, changeset: comment_changeset)
+  end
 
 end

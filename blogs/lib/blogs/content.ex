@@ -131,6 +131,8 @@ defmodule Blogs.Content do
     Post.changeset(post, attrs)
   end
 
+
+  # Comment Ecto CRUD Operations
   alias Blogs.Content.Comment
 
   @doc """

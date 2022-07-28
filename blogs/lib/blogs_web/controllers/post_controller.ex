@@ -38,7 +38,6 @@ defmodule BlogsWeb.PostController do
   #Updated Show Action
   def show(conn, %{"id" => id}) do
     post = Content.get_post!(id) |> Content.inc_page_views()
-    users = Content.list_users()
     comment_changeset = Content.change_comment(%Comment{})
     render(conn, "show.html", post: post, comment_changeset: comment_changeset)
   end

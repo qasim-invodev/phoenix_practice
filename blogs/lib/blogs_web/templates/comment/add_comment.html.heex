@@ -1,0 +1,10 @@
+<%= form_for @comment_changeset, 
+    Routes.post_comment_path(@conn, :create, @post),
+    [class: "comment"],
+    fn form -> %>
+        <%= label form, :add_comment %>
+        <%= textarea form, :body, id: "body_editor"%>
+        <%= error_tag form, :body %>
+
+        <%= submit "Post Comment", class: "btn btn-primary-comment"%>
+    <% end %>
