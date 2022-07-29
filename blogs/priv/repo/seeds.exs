@@ -9,3 +9,14 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+
+
+alias Blogs.Content.Comment
+
+Repo.insert!(%Comment{user_id: dog.id, post_id: post1.id, message: "woof" })
+
+# this also checks the relationships
+post2
+|> Ecto.build_assoc(:comments)
+|> Comment.changeset(%{user_id: dog.id, post_id: post2.id, message: "BARK" })
+|> Repo.insert!()

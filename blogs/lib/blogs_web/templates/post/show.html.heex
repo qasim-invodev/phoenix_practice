@@ -1,22 +1,26 @@
+<% cuid = @current_user && @current_user.id %>
 <h1>Show Post</h1>
 <div>
   <h2>
-    Title:
+    <strong>Title: </strong>
     <%= @post.title %>
   </h2>
     
   <strong>Views:</strong><%= @post.views %><br>
-  <strong>Posted_by:</strong><%= @post.user_id %>
+  <strong>Posted_by:</strong><%= @post.user.email %>
 
   <p>
-    <strong>Body:</strong>
+    <strong>Post:</strong>
     <%= @post.body %>
   </p>
 
 </div>
-<%= if @conn.assigns.current_user.id == @post.user_id do %>
+<%= if @post.user_id == cuid do %>
   <span><%= link "Edit", to: Routes.post_path(@conn, :edit, @post) %></span> |
   <span><%= link "Back", to: Routes.post_path(@conn, :index) %></span>
 <% else %>
   <span><%= link "Back", to: Routes.post_path(@conn, :index) %></span>
 <% end %>
+<br>
+<br>
+<%= render "comment.html", assigns %>
