@@ -13,7 +13,8 @@ defmodule Blogs.ContentFixtures do
       |> Enum.into(%{
         body: "some body",
         title: "some title",
-        views: 42
+        views: 42,
+        user_id: 2
       })
       |> Blogs.Content.create_post()
 
@@ -27,7 +28,9 @@ defmodule Blogs.ContentFixtures do
     {:ok, comment} =
       attrs
       |> Enum.into(%{
-        body: "some body"
+        body: "some body",
+        user_id: 1,
+        post_id: 2
       })
       |> Blogs.Content.create_comment()
 

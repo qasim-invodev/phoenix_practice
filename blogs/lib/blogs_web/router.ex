@@ -18,9 +18,10 @@ defmodule BlogsWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", BlogsWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", BlogsWeb do
+    pipe_through :api
+    resources "/articles", ArticleController, except: [:new, :edit]
+  end
 
   # Enables LiveDashboard only for development
   #

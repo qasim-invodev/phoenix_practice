@@ -2,14 +2,15 @@ defmodule Blogs.ContentTest do
   use Blogs.DataCase
 
   alias Blogs.Content
+  alias Blogs.Content.Comment
+  alias Blogs.Content.Post
+  import Blogs.ContentFixtures
 
+  @moduletag :content_test
   describe "posts" do
-    alias Blogs.Content.Post
-
-    import Blogs.ContentFixtures
-
-    @invalid_attrs %{body: nil, title: nil, views: nil}
-
+    @valid_attrs %{body: "some body", title: "some title", views: 42, user_id: 2}
+    @invalid_attrs %{body: nil, title: nil, views: nil, user_id: nil}
+    @tag :post_test
     test "list_posts/0 returns all posts" do
       post = post_fixture()
       assert Content.list_posts() == [post]
@@ -21,12 +22,12 @@ defmodule Blogs.ContentTest do
     end
 
     test "create_post/1 with valid data creates a post" do
-      valid_attrs = %{body: "some body", title: "some title", views: 42}
 
-      assert {:ok, %Post{} = post} = Content.create_post(valid_attrs)
+      assert {:ok, %Post{} = post} = Content.create_post(@valid_attrs)
       assert post.body == "some body"
       assert post.title == "some title"
       assert post.views == 42
+      assert post.user_id == 2
     end
 
     test "create_post/1 with invalid data returns error changeset" do
@@ -62,17 +63,8 @@ defmodule Blogs.ContentTest do
   end
 
   describe "comments" do
-    alias Blogs.Content.Comment
 
-    import Blogs.ContentFixtures
-
-    @invalid_attrs %{body: nil}
-
-    test "list_comments/0 returns all comments" do
-      comment = comment_fixture()
-      assert Content.list_comments() == [comment]
-    end
-
+    @invalid_attrs %{body: nil, user_id: nil, post_id: nil}
     test "get_comment!/1 returns the comment with given id" do
       comment = comment_fixture()
       assert Content.get_comment!(comment.id) == comment
@@ -83,6 +75,8 @@ defmodule Blogs.ContentTest do
 
       assert {:ok, %Comment{} = comment} = Content.create_comment(valid_attrs)
       assert comment.body == "some body"
+      assert comment.user_id == 1
+      assert comment.post_id == 2
     end
 
     test "create_comment/1 with invalid data returns error changeset" do
