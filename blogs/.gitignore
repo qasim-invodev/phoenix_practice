@@ -32,3 +32,5 @@ blogs-*.tar
 npm-debug.log
 /assets/node_modules/
 
+/config/runtime.exs
+
