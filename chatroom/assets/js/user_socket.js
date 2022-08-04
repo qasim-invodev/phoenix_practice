@@ -2,7 +2,7 @@
 // you uncomment its entry in "assets/js/app.js".
 
 // Bring in Phoenix channels client library:
-import {Socket} from "phoenix"
+import {Socket, Presence} from "phoenix"
 
 // And connect to the path in "lib/chatroom_web/endpoint.ex". We pass the
 // token for authentication. Read below how it should be used.
