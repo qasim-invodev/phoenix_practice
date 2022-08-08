@@ -23,10 +23,6 @@ defmodule Blogs.Content do
 
   """
   def list_posts do
-    # query = from(p in Post,
-    #   left_join: u in assoc(p,:user),
-    #   preload: [:user],
-    #   select: [:id, :user_id,:body, :title, :views, user: [:id, :email]])
     Repo.all(Post) |> Repo.preload([:user])
   end
 
