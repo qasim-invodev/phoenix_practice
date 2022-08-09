@@ -19,7 +19,7 @@ defmodule Blogs.MixProject do
   def application do
     [
       mod: {Blogs.Application, []},
-      extra_applications: [:logger, :runtime_tools,:pdf_generator]
+      extra_applications: [:logger, :runtime_tools]
     ]
   end
 
@@ -48,8 +48,7 @@ defmodule Blogs.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.18"},
       {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.5"},
-      {:pdf_generator, "~> 0.6.2"}
+      {:plug_cowboy, "~> 2.5"}
     ]
   end
 
