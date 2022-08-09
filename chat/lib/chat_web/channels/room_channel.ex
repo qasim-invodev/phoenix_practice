@@ -1,8 +1,14 @@
 defmodule ChatWeb.RoomChannel do
   use ChatWeb, :channel
 
-  alias ChatWeb.Presence
-
+  alias Chat.{
+    Message,
+    Repo
+  }
+  alias ChatWeb.{
+    MessageView,
+    Presence
+  }
   # @impl true
   # def join("room:lobby", payload, socket) do
   #   if authorized?(payload) do
@@ -12,33 +18,54 @@ defmodule ChatWeb.RoomChannel do
   #   end
   # end
 
+  @impl true
   def join("room:lobby", _params, socket) do
     send(self(), :after_join)
     {:ok, socket}
   end
 
+  @impl true
   def join(_others, _params, _socket) do
     {:error, "Room does not exist"}
   end
 
+  @impl true
   def handle_info(:after_join, socket) do
-    {:ok, _} =
-      Presence.track(socket, socket.assigns.user, %{
-        online_at: inspect(:os.system_time(:milli_seconds))
-      })
+    socket
+    |> track_presence
+    |> send_recent_messages
 
-    push(socket, "presence_state", Presence.list(socket))
     {:noreply, socket}
   end
 
   @impl true
-  def handle_in("message:new", message, socket) do
-    broadcast! socket, "message:new", %{
+  def handle_in("message:new", body, socket) do
+    IO.inspect(body)
+    message = Repo.insert! %Message{
+      topic: socket.topic,
       user: socket.assigns.user,
-      body: message,
-      timestamp: :os.system_time(:milli_seconds)
+      body: Map.get(body, "body")
     }
+    broadcast! socket, "message:new", MessageView.render("message.json",%{message: message})
     {:noreply, socket}
+  end
+
+  defp track_presence(socket) do
+    push(socket, "presence_state", Presence.list(socket))
+    Presence.track(socket, socket.assigns.user, %{
+      online_at: inspect(:os.system_time(:milli_seconds))
+    })
+    socket
+  end
+
+  defp send_recent_messages(socket) do
+    messages =
+      socket.topic
+      |> Message.recent
+      |> Repo.all
+
+    push(socket, "messages:recent", MessageView.render("index.json", %{messages: messages}))
+    socket
   end
 
   # Channels can be used in a request/response fashion

@@ -108,26 +108,30 @@ messageInput.addEventListener("keypress", event => {
 })
 
 let messageList = document.getElementById("MessageList")
-// let renderMessage = (message) => {
-//   let messageElement = document.createElement("li")
-//   messageElement.innerHTML = `
-//     <b>${message.name}</b>
-//     <i>${formatTimestamp(message.timestamp)}</i>
-//     <p>${message.body}</p>
-//   `
-//   messageList.appendChild(messageElement)
-//   messageList.scrollTop = messageList.scrollHeight;
-// }
-
-room.on("message:new",  payload => {
+let renderMessage = (payload) => {
   let messageItem = document.createElement("li")
   messageItem.innerHTML = `
     <b>${payload.user}</b>
     <i>${formatTimestamp(payload.timestamp)}</i>
-    <p>${payload.body.body}</p>
+    <p>${payload.body}</p>
   `
-  // messageItem.innerText = `[${Date()}] ${payload.body}`
   messageList.appendChild(messageItem)
+  messageList.scrollTop = messageList.scrollHeight;
+}
+
+room.on("message:new",  payload => {
+  renderMessage(payload)
+  // let messageItem = document.createElement("li")
+  // messageItem.innerHTML = `
+  //   <b>${payload.user}</b>
+  //   <i>${formatTimestamp(payload.timestamp)}</i>
+  //   <p>${payload.body.body}</p>
+  // `
+  // messageList.appendChild(messageItem)
+})
+
+room.on("messages:recent", ({data: messages}) => {
+  messages.map(renderMessage)
 })
 // Now that you are connected, you can join channels with a topic.
 // Let's assume you have a channel with a topic named `room` and the
