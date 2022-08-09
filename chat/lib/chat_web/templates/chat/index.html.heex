@@ -1,0 +1,21 @@
+<div class="row">
+    <span hidden id="User"><%= @conn.assigns.current_user.name %></span>
+</div>
+
+<div>
+  <h2>Who’s Online</h2>
+  <ul id="UserList" class="list-unstyled">
+    <li>Loading online users...</li>
+  </ul>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    
+    <input type="text" id="NewMessage" placeholder="Type and press enter..." class="form-control">
+    <h2>Messages</h2>
+    <ul id="MessageList" class="list-unstyled"></ul> 
+  </div>
+
+  
+</div>
