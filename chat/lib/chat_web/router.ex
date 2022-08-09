@@ -11,16 +11,20 @@ defmodule ChatWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_user
+    plug :put_user_token
   end
 
   pipeline :api do
     plug :accepts, ["json"]
   end
 
-  scope "/", ChatWeb do
-    pipe_through :browser
-
-    get "/", PageController, :index
+  defp put_user_token(conn, _) do
+    if current_user = conn.assigns[:current_user] do
+      token = Phoenix.Token.sign(conn, "user socket", current_user.id)
+      assign(conn, :user_token, token)
+    else
+      conn
+    end
   end
 
   # Other scopes may use custom stacks.
@@ -75,6 +79,7 @@ defmodule ChatWeb.Router do
   scope "/", ChatWeb do
     pipe_through [:browser, :require_authenticated_user]
 
+    get "/chat", ChatController, :index
     get "/users/settings", UserSettingsController, :edit
     put "/users/settings", UserSettingsController, :update
     get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email
@@ -83,6 +88,7 @@ defmodule ChatWeb.Router do
   scope "/", ChatWeb do
     pipe_through [:browser]
 
+    get "/", PageController, :index
     delete "/users/log_out", UserSessionController, :delete
     get "/users/confirm", UserConfirmationController, :new
     post "/users/confirm", UserConfirmationController, :create
