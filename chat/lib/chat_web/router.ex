@@ -89,6 +89,7 @@ defmodule ChatWeb.Router do
     pipe_through [:browser]
 
     get "/", PageController, :index
+    get "/users/log_out", UserSessionController, :delete
     delete "/users/log_out", UserSessionController, :delete
     get "/users/confirm", UserConfirmationController, :new
     post "/users/confirm", UserConfirmationController, :create
