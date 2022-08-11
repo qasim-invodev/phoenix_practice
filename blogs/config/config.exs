@@ -46,8 +46,8 @@ config :logger, :console,
 
 
 #Configure PDF Generator
-# config :pdf_generator,
-#   wkhtml_path: "/usr/local/bin/wkhtmltopdf"
+config :pdf_generator,
+  wkhtml_path: "/usr/local/bin/wkhtmltopdf"
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason

@@ -15,6 +15,7 @@
   </p>
 
 </div>
+<span><%= link "Save PDF", to: Routes.post_path(@conn, :pdf, @post) %></span><br>
 <%= if @post.user_id == cuid do %>
   <span><%= link "Edit", to: Routes.post_path(@conn, :edit, @post) %></span> |
   <span><%= link "Back", to: Routes.post_path(@conn, :index) %></span>

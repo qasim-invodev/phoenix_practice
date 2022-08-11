@@ -35,6 +35,25 @@ defmodule BlogsWeb.PostController do
     end
   end
 
+
+  def pdf(conn, %{"id" => id}) do
+    post = Content.get_post!(id) |> Content.inc_page_views()
+    html = Phoenix.View.render_to_string(BlogsWeb.PostView, "pdf.html", post: post)
+    case PdfGenerator.generate(html, page_size: "A4", shell_params: ["--dpi", "300"]) do
+        {:ok, filename} ->
+          :ok = File.rename(filename, "./priv/static/post_pdfs/post_#{id}_#{DateTime.utc_now()}.pdf")
+          conn
+          |> put_flash(:info, "PDF Saved")
+          |> redirect(to: Routes.post_path(conn, :show, post))
+
+        # TODO: return to form and show errors
+        {:error, _changeset} ->
+          conn
+          |> put_flash(:error, "PDF Failed")
+          |> redirect(to: Routes.post_path(conn, :show, post))
+    end
+  end
+
   #Updated Show Action
   def show(conn, %{"id" => id}) do
     post = Content.get_post!(id) |> Content.inc_page_views()

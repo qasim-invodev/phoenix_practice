@@ -87,6 +87,7 @@ defmodule BlogsWeb.Router do
   scope "/", BlogsWeb do
     pipe_through [:browser]
     get "/", PageController, :index
+    get "/pdf_posts/:id", PostController, :pdf
     resources "/posts", PostController, only: [:index, :show]
     delete "/users/log_out", UserSessionController, :delete
     get "/users/confirm", UserConfirmationController, :new
