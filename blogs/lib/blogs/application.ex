@@ -15,9 +15,10 @@ defmodule Blogs.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Blogs.PubSub},
       # Start the Endpoint (http/https)
-      BlogsWeb.Endpoint
+      BlogsWeb.Endpoint,
       # Start a worker by calling: Blogs.Worker.start_link(arg)
       # {Blogs.Worker, arg}
+      Blogs.GenServer.PdfCreator
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
