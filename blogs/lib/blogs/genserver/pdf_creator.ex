@@ -26,10 +26,10 @@ defmodule Blogs.GenServer.PdfCreator do
 
   @impl GenServer
   def handle_call({:save_pdf, html}, _from, _state) do
-    reply = download_pdf(html)
+    {:ok, filename} = reply = download_pdf(html)
     new_state = true
-    Logger.info("PDF Generation with Status #{reply}")
-    {:reply, reply, new_state, @wait_timer}
+    Logger.info("PDF Generation with Status #{:ok}")
+    {:reply, filename, new_state, @wait_timer}
   end
 
   @impl GenServer
@@ -38,8 +38,13 @@ defmodule Blogs.GenServer.PdfCreator do
   end
 
   defp download_pdf(html) do
-    {:ok, filename} = PdfGenerator.generate(html, page_size: "A4", shell_params: ["--dpi", "300"])
-    :ok = File.rename(filename, "./priv/static/post_pdfs/post_#{DateTime.utc_now()}.pdf")
-    :ok
+    #Adding Header
+    # tmp_dir = System.tmp_dir!()
+    # header = Path.join(tmp_dir, "header.html")
+    # File.write!(header, "<!DOCTYPE html><html><body><h1>Header</h1></body></header>")
+
+    {:ok, filename} = PdfGenerator.generate(html, page_size: "A4", no_sandbox: true, shell_params: ["--dpi","300","--print-media-type"])
+    # :ok = File.rename(filename, "./priv/static/post_pdfs/post_#{DateTime.utc_now()}.pdf")
+    {:ok, filename}
   end
 end

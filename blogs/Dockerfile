@@ -40,6 +40,60 @@ COPY mix.exs mix.lock ./
 RUN mix deps.get --only $MIX_ENV
 RUN mkdir config
 
+
+# copy compile-time config files before we compile dependencies
+RUN apt-get update
+RUN apt-get install -y xvfb
+
+RUN apt-get install -y wget fontconfig fontconfig-config fonts-dejavu-core libbsd0 \
+libfontconfig1 libfontenc1 libfreetype6 libjpeg62-turbo libmd0 libpng16-16 \
+libx11-6 libx11-data libxau6 libxcb1 libxdmcp6 libxext6 libxrender1 sensible-utils \
+ucf x11-common xfonts-75dpi xfonts-base xfonts-encodings xfonts-utils
+
+RUN wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.buster_amd64.deb
+
+RUN dpkg -i wkhtmltox_0.12.6-1.buster_amd64.deb
+RUN cp /usr/local/bin/wkhtmlto* /usr/bin/
+
+# RUN apt-get update && apt-get install -y \
+#     xvfb \
+#     wget \
+#     openssl \
+#     xorg \
+#     libssl1.1 \
+#     build-essential \
+#     libpng-dev \
+#     libjpeg62-turbo-dev \
+#     libfreetype6-dev \
+#     zip \
+#     jpegoptim optipng pngquant gifsicle \
+#     vim \
+#     unzip \
+#     git \
+#     curl \
+#     libzip-dev \
+#     dcmtk \
+#     nginx \
+#     supervisor
+
+# RUN apt-get install -y wget fontconfig fontconfig-config fonts-dejavu-core libbsd0 \
+# libfontconfig1 libfontenc1 libfreetype6 libjpeg62-turbo libmd0 libpng16-16 \
+# libx11-6 libx11-data libxau6 libxcb1 libxdmcp6 libxext6 libxrender1 sensible-utils \
+# ucf x11-common xfonts-75dpi xfonts-base xfonts-encodings xfonts-utils \
+# openssl build-essential xorg libssl1.1
+
+# RUN apt-get install -y openssl build-essential xorg libssl1.1
+
+# RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
+# RUN tar xvJf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
+# RUN cp wkhtmltox/bin/wkhtmlto* /usr/bin/
+# RUN apt-get install -y wget
+
+# # RUN apt-get install -y openssl build-essential xorg libssl1.0-dev
+# RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
+# RUN tar xvJf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
+
+
 # copy compile-time config files before we compile dependencies
 # to ensure any relevant config change will trigger the dependencies
 # to be re-compiled.

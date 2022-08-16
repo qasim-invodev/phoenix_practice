@@ -54,10 +54,16 @@ defmodule BlogsWeb.PostController do
     #       |> redirect(to: Routes.post_path(conn, :show, post))
     # end
     case PdfCreator.save_pdf(html) do
-      :ok ->
+      filename ->
         conn
+        |> put_resp_content_type("application/pdf", "utf-8")
+        |> put_resp_header(
+          "content-disposition",
+          "attachment; filename=\"post_#{id}_#{DateTime.utc_now()}.pdf\""
+          )
         |> put_flash(:info, "PDF Saved")
-        |> redirect(to: Routes.post_path(conn, :show, post))
+        # |> redirect(to: Routes.post_path(conn, :show, post))
+        |> send_file(200, filename)
 
       _ ->
         conn

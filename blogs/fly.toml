@@ -10,7 +10,7 @@ processes = []
   PORT = "4000"
 
 [deploy]
-  release_command = "/blogs/bin/migrate"
+  release_command = "/app/bin/migrate"
 
 [experimental]
   allowed_public_ports = []
