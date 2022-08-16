@@ -1,0 +1,31 @@
+<.form let={f} for={@changeset} action={@action}>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <%= label f, :title %>
+  <%= text_input f, :title %>
+  <%= error_tag f, :title %>
+
+  <%= inputs_for f, :todo_items, fn i -> %>
+    <div class="form-group">
+      <%= label i, :body, "Task ##{i.index + 1}", class: "control-label" %>
+      <%= text_input i, :body, class: "form-control" %>
+      <%= if message = i.errors[:body] do %>
+        <span class="help-block"><%= message %></span>
+      <% end %>
+    </div>
+    <%= if i.data.id do %>
+      <span class="pull-right">
+        <%= label i, :delete, "Delete?", class: "control-label" %>
+        <%= checkbox i, :delete %>
+      </span>
+    <% end %>
+  <% end %>
+
+  <div>
+    <%= submit "Save" %>
+  </div>
+</.form>
